@@ -1,40 +1,50 @@
 package learn;
 
+import java.util.BitSet;
+
 public class App {
     public static void main(String[] args) {
-        outputAppRequirements();
+        int nElementsInserted = 235_976;
+        double DSF = 0.01; // desired false positive probability
+
+        // for development
+        outputAppRequirements(nElementsInserted, DSF);
+
+        // STEP 1
+        // create a bit array and set bits to zero
+        int bitsRequired = Helpers.calculateBitArraySize(DSF, nElementsInserted);
+        BitSet bitArray = new BitSet(bitsRequired);
+
+        // hash items for bit array and set corresponding bits
+
+        // query for item to determine if query is working
     }
 
-    public static void outputAppRequirements() {
-        long nElementsInserted = 235_976;
-        double DSF = 0.01;      // desired false positive probability
+    public static void outputAppRequirements(int nElements, double DSF) {
+        /* Outputs basic memory requirements for bloom filter
+        * nElements - number of elements in dictionary for filter
+        * DSF - 'Desired False Positive' probability for bloom filter
+        * */
         double bitsPerByte = 8.0;     // bits per Mb
         double bytesPerMb = 1024.0; // bytes per Mb
 
-        long bitsRequired = Helpers.calculateBitArraySize(DSF, nElementsInserted);
+        int bitsRequired = Helpers.calculateBitArraySize(DSF, nElements);
         int bytesRequired = (int) Math.ceil(bitsRequired / bitsPerByte);
         int mbRequired = (int) Math.ceil(bytesRequired / bytesPerMb);
 
-        long nHashFunctions = Helpers.calculateNumOfHashFunctions(bitsRequired, nElementsInserted);
+        int nHashFunctions = Helpers.calculateNumOfHashFunctions(bitsRequired, nElements);
 
-
-        String out = String.format("Application Requirements\n" +
-                "\tElements inserted:  %d\n" +
-                "\tDesired False P:    %.2f\n" +
-                "\tHash functions:     %d\n" +
-                "\tNumber of bits:     %d\n" +
-                "\t\t... %d Bytes\n" +
-                "\t\t... %d Mb\n",
-                nElementsInserted, DSF, nHashFunctions, bitsRequired, bytesRequired, mbRequired);
+        String out = String.format("""
+                        Application Requirements
+                        \tElements inserted:  %d
+                        \tDesired False P:    %.2f
+                        \tHash functions:     %d
+                        \tNumber of bits:     %d
+                        \t\t... %d Bytes
+                        \t\t... %d Mb
+                        """,
+                nElements, DSF, nHashFunctions, bitsRequired, bytesRequired, mbRequired);
 
         System.out.println(out);
     }
-
-    // create a bit array and set bits to zero
-
-
-
-    // hash items for bit array and set corresponding bits
-
-    // query for item to determine if query is working
 }
