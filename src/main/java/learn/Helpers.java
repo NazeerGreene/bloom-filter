@@ -9,7 +9,7 @@ public class Helpers {
     // long n = number of elements inserted
     public static long calculateBitArraySize(double p, long n) {
         double bitArraySize = - n * Math.log(p) / Math.pow(Math.log(2), 2);
-        return (long) Math.floor(bitArraySize);
+        return (long) Math.ceil(bitArraySize);
     }
     // calculate optimal number of hash functions
     // using this equation
