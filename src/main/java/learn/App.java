@@ -14,8 +14,15 @@ public class App {
         // create a bit array and set bits to zero
         int bitsRequired = Helpers.calculateBitArraySize(DSF, nElementsInserted);
         BitSet bitArray = new BitSet(bitsRequired);
+        bitArray.clear();
+
 
         // hash items for bit array and set corresponding bits
+        String test = "Hello World!";
+        byte[] bytes = test.getBytes();
+
+        long hashed = FNVHash.fnv1a64(bytes);
+        System.out.printf("Hash is %x%n", hashed);
 
         // query for item to determine if query is working
     }
