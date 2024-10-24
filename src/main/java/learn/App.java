@@ -2,12 +2,15 @@ package learn;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.BitSet;
 
 public class App {
     public static void main(String[] args) {
-        int nElementsInserted = 235_976;
+//        int nElementsInserted = 235_976;
+        int nElementsInserted = 10_000;
+
         double DSF = 0.01; // desired false positive probability
 
         // for development
@@ -21,26 +24,32 @@ public class App {
 
 
         // hash items for bit array and set corresponding bits
-        String test = "Hello World!";
-        byte[] bytes = test.getBytes();
+        String test = "Hello";
+        byte[] bytes = test.getBytes(StandardCharsets.UTF_8);
 
 
-        // testing the output
+        // First pass - setting bits
         long[] hashes = hash_k_times(bytes, 6);
-
-        // we use the hashed values to determine which bits to set in the bit array
-        // and therefore the same hashed values should correlate to that element
-        // being present in the member set.
-
-        // set the bits
-        for(long hash: hashes) {
-            System.out.println(hash);
-            // java preserves the sign of the dividend, so we must control for that
-            int index = Math.abs((int) (hash % bitsRequired));
-            bitArray.set(index);
+        System.out.println("Setting bits:");
+        for (long hash: hashes) {
+            // Proper modulo handling for long to int conversion
+            int index = getIndexFromHash(hash, bitsRequired);
+            bitArray.set(index, true);
+            System.out.printf("Hash: %d, Index: %d, Bit: %b%n",
+                    hash, index, bitArray.get(index));
         }
 
-        // query for item to determine if query is working
+        // Second pass - checking bits
+        System.out.println("\nChecking bits:");
+        byte[] query = test.getBytes(StandardCharsets.UTF_8);
+        long[] queryHashes = hash_k_times(query, 6);
+
+        for (long hash: queryHashes) {
+            int index = getIndexFromHash(hash, bitsRequired);
+            System.out.printf("Hash: %d, Index: %d, Bit: %b%n",
+                    hash, index, bitArray.get(index));
+        }
+
 
     }
 
@@ -68,6 +77,11 @@ public class App {
         // java uses big-endian order by default
         // allocation overhead could be costly for 100s of 1000s of calls.
         return ByteBuffer.allocate(Long.BYTES).putLong(value).array();
+    }
+
+    private static int getIndexFromHash(long hash, int bitsRequired) {
+        // Handle potential integer overflow and negative numbers
+        return Math.abs((int) ((hash & 0x7FFFFFFFFFFFFFFFL) % bitsRequired));
     }
 
     public static void outputAppRequirements(int nElements, double DSF) {
