@@ -9,6 +9,7 @@
 package learn;
 
 public class FNVHash {
+    // these constants are mathematically derived for 64-bit length hashes
     private static final long FNV_OFFSET_BASIS_64 = 0xcbf29ce484222325L;
     private static final long FNV_PRIME_64 = 0x100000001b3L;
 

@@ -1,5 +1,8 @@
 package learn;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Arrays;
 import java.util.BitSet;
 
 public class App {
@@ -21,10 +24,50 @@ public class App {
         String test = "Hello World!";
         byte[] bytes = test.getBytes();
 
-        long hashed = FNVHash.fnv1a64(bytes);
-        System.out.printf("Hash is %x%n", hashed);
+
+        // testing the output
+        long[] hashes = hash_k_times(bytes, 6);
+
+        // we use the hashed values to determine which bits to set in the bit array
+        // and therefore the same hashed values should correlate to that element
+        // being present in the member set.
+
+        // set the bits
+        for(long hash: hashes) {
+            System.out.println(hash);
+            // java preserves the sign of the dividend, so we must control for that
+            int index = Math.abs((int) (hash % bitsRequired));
+            bitArray.set(index);
+        }
 
         // query for item to determine if query is working
+
+    }
+
+    public static long[] hash_k_times(byte[] data, int nFunctions) {
+        long[] hashValues = new long[nFunctions];
+
+        for (int i = 0; i < nFunctions; i++) {
+            hashValues[i] = getHashWithIdentifier(data, i);
+        }
+
+        return hashValues;
+    }
+    /* Helper Function
+    * The FNV hashing algorithm doesn't use seeds to create its hash values,
+    * so we will instead create a hash, write the identifier into the hash,
+    * and then re-hash; this creates a unique hash value.
+    * */
+    public static long getHashWithIdentifier(byte[] data, int identifier) {
+        // XORing the identifier is enough to make it enough
+        long hashValue = FNVHash.fnv1a64(data) ^ identifier;
+        return FNVHash.fnv1a64(longToByteArray(hashValue));
+    }
+
+    public static byte[] longToByteArray(long value) {
+        // java uses big-endian order by default
+        // allocation overhead could be costly for 100s of 1000s of calls.
+        return ByteBuffer.allocate(Long.BYTES).putLong(value).array();
     }
 
     public static void outputAppRequirements(int nElements, double DSF) {
