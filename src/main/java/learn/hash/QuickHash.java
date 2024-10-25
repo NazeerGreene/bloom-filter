@@ -9,6 +9,6 @@ package learn.hash;
 * each hash will the result of applying the seed.
 * */
 public interface QuickHash {
-    public long hash(byte[] data, int seed);
-    public long[] hash_k_times(byte[] data, int[] seeds);
+    long hash(byte[] data, int seed);
+    long[] hash_k_times(byte[] data, int[] seeds);
 }

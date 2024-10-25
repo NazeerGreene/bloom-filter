@@ -56,9 +56,4 @@ public class FNV1A64 implements QuickHash {
         // allocation overhead could be costly for 100s of 1000s of calls.
         return ByteBuffer.allocate(Long.BYTES).putLong(value).array();
     }
-
-    private static int getIndexFromHash(long hash, int bitsRequired) {
-        // Handle potential integer overflow and negative numbers
-        return Math.abs((int) ((hash & 0x7FFFFFFFFFFFFFFFL) % bitsRequired));
-    }
 }
