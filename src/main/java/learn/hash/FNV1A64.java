@@ -40,17 +40,17 @@ public class FNV1A64 implements QuickHash {
         return hashValues;
     }
 
-    /* Helper Function
-     * The FNV hashing algorithm doesn't use seeds to create its hash values,
-     * so we will instead create a hash, write the identifier into the hash,
-     * and then re-hash; this creates a unique hash value.
-     * */
+    // Helper Function
+    // The FNV hashing algorithm doesn't use seeds to create its hash values,
+    // so we will instead create a hash, write the identifier into the hash,
+    // and then re-hash; this creates a unique hash value.
     public long getHashWithIdentifier(byte[] data, int identifier) {
         // XORing the identifier is enough to make it enough
         long hashValue = this.hash(data, 0) ^ identifier;
         return this.hash(longToByteArray(hashValue), 0);
     }
 
+    // Helper Function for getHashWithIdentifier
     public static byte[] longToByteArray(long value) {
         // java uses big-endian order by default
         // allocation overhead could be costly for 100s of 1000s of calls.

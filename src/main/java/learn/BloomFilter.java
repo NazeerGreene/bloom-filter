@@ -15,7 +15,6 @@ public class BloomFilter {
     public static double DSF_MAX = 1.0;
     public static double DSF_MIN =  Double.MIN_VALUE;
     public static double DSF_DEFAULT = 0.01;
-    public static int N_HASHFUNCTION_DEFAULT = 1;
 
     public BloomFilter(double DSF, QuickHash quickHash, int[] seeds) {
         this.DSF = isValidDsf(DSF) ?  DSF : DSF_DEFAULT;
@@ -50,26 +49,32 @@ public class BloomFilter {
         return true;
     }
 
+    // Adds a new member to the member set.
+    // The member set must be built first,
+    // no element rejected otherwise.
     public void add(String element) {
         if (bitArray == null) { return; }
 
         long[] hashes = quickHash.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
         for (long hash: hashes) {
-            int index = getIndexFromHash(hash, bitArray.size());
+            int index = getIndexFromHash(hash);
             bitArray.set(index, true);
 //            System.out.printf("Hash: %d, Index: %d, Bit: %b%n",
 //                hash, index, bitArray.get(index));
         }
     }
 
+    // Queries member set to check for element.
+    // true - element exists in set
+    // false - element does not exist in set
     public boolean contains(String element) {
         if (bitArray == null) { return false; }
 
         long[] hashes = quickHash.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
         for (long hash: hashes) {
-            int index = getIndexFromHash(hash, bitArray.size());
+            int index = getIndexFromHash(hash);
 //            System.out.printf("Hash: %d, Index: %d, Bit: %b%n",
 //                hash, index, bitArray.get(index));
             if (!bitArray.get(index)) {
@@ -87,9 +92,9 @@ public class BloomFilter {
         return dsf >= DSF_MIN && dsf <= DSF_MAX;
     }
 
-    private static int getIndexFromHash(long hash, int bitsRequired) {
+    private int getIndexFromHash(long hash) {
         // Handle potential integer overflow and negative numbers
-        return Math.abs((int) ((hash & 0x7FFFFFFFFFFFFFFFL) % bitsRequired));
+        return Math.abs((int) ((hash & 0x7FFFFFFFFFFFFFFFL) % bitArray.size()));
     }
 
     // calculate bit array size
@@ -99,6 +104,14 @@ public class BloomFilter {
     // double p = desired false positive
     // int n = number of elements inserted
     public static int calculateBitArraySize(double p, int n) {
+        // Input validation
+        if (p <= 0 || p >= 1) {
+            throw new IllegalArgumentException("False positive rate must be between 0 and 1");
+        }
+        if (n <= 0) {
+            throw new IllegalArgumentException("Number of elements must be positive");
+        }
+
         double bitArraySize = - n * Math.log(p) / Math.pow(Math.log(2), 2);
         return (int) Math.ceil(bitArraySize);
     }
@@ -109,9 +122,20 @@ public class BloomFilter {
     // int m = bit array size
     // int n = number of elements inserted
     public static int calculateNumOfHashFunctions(int m, int n) {
-        double optimalHashes = m * Math.log(2) / n;
-        return (int) Math.floor(optimalHashes);
+        if (m <= 0) {
+            throw new IllegalArgumentException("Bit array size must be positive");
+        }
+        if (n <= 0) {
+            throw new IllegalArgumentException("Number of elements must be positive");
+        }
+
+        double optimalHashes = (double) m / n * Math.log(2);
+        return (int) Math.ceil(optimalHashes);
     }
+//    NOTE
+//    The actual number of hash functions greatly affects the Bloom filter's performance:
+//    Too few: More false positives
+//    Too many: Slower performance and potentially more bits set than necessary
 
     // Outputs basic memory requirements for bloom filter
     // nElements - number of elements in dictionary for filter
@@ -141,52 +165,3 @@ public class BloomFilter {
         System.out.println(out);
     }
 }
-
-
-//public static void main(String[] args) {
-////        int nElementsInserted = 235_976;
-//    int nElementsInserted = 10_000;
-//
-//    // for development
-//    outputAppRequirements(nElementsInserted, DSF);
-//
-//    // STEP 1
-//    // create a bit array and set bits to zero
-//    int bitsRequired = Helpers.calculateBitArraySize(DSF, nElementsInserted);
-//    BitSet bitArray = new BitSet(bitsRequired);
-//    bitArray.clear();
-//
-//
-//    // hash items for bit array and set corresponding bits
-//    String test = "Hello";
-//    byte[] bytes = test.getBytes(StandardCharsets.UTF_8);
-//
-//
-//    // First pass - setting bits
-//    long[] hashes = hash_k_times(bytes, 6);
-//    System.out.println("Setting bits:");
-//    for (long hash: hashes) {
-//        // Proper modulo handling for long to int conversion
-//        int index = getIndexFromHash(hash, bitsRequired);
-//        bitArray.set(index, true);
-//        System.out.printf("Hash: %d, Index: %d, Bit: %b%n",
-//                hash, index, bitArray.get(index));
-//    }
-//
-//    // Second pass - checking bits
-//    System.out.println("\nChecking bits:");
-//    byte[] query = test.getBytes(StandardCharsets.UTF_8);
-//    long[] queryHashes = hash_k_times(query, 6);
-//
-//    for (long hash: queryHashes) {
-//        int index = getIndexFromHash(hash, bitsRequired);
-//        System.out.printf("Hash: %d, Index: %d, Bit: %b%n",
-//                hash, index, bitArray.get(index));
-//    }
-//
-//
-//}
-//
-
-//
-
