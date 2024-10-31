@@ -23,6 +23,13 @@ public class BloomFilter {
         this.bitArray = null;
     }
 
+    public BloomFilter(BloomFilter other) {
+        this.DSF = other.DSF;
+        this.seeds = other.getSeeds();
+        this.quickHash = other.quickHash;
+        this.bitArray = null;
+    }
+
     // Returns the desired false positive probability
     public double getDSF() {
         return DSF;
@@ -52,8 +59,8 @@ public class BloomFilter {
     // Adds a new member to the member set.
     // The member set must be built first,
     // no element rejected otherwise.
-    public void add(String element) {
-        if (bitArray == null) { return; }
+    public boolean add(String element) {
+        if (bitArray == null) { return false; }
 
         long[] hashes = quickHash.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
@@ -63,6 +70,8 @@ public class BloomFilter {
 //            System.out.printf("Hash: %d, Index: %d, Bit: %b%n",
 //                hash, index, bitArray.get(index));
         }
+
+        return true;
     }
 
     // Queries member set to check for element.
@@ -84,7 +93,6 @@ public class BloomFilter {
 
         return true;
     }
-
 
     // ----------------------------- HELPERS -----------------------------
 
