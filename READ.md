@@ -1,4 +1,6 @@
-a simple spell checker implemented with a bloom checker, inspired by: https://codingchallenges.fyi/challenges/challenge-bloom
+A simple spell checker implemented with a bloom checker, inspired by: https://codingchallenges.fyi/challenges/challenge-bloom
+
+A bloom filter is a space-efficient probabilistic data structure that determines if an element is a member of a set.
 
 ### Step 1
 In this step your goal is to use test driven development (TDD) to develop the Bloom filter data structure. OK you don’t have to use TDD, but I’d suggest writing some tests either before or after writing the Bloom filter, both to test that it works correctly and to help you understand how it works.
