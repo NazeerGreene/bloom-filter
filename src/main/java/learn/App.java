@@ -48,6 +48,11 @@ public class App {
 
         System.out.println("Querying for 'zoo' [false]: " + filter.contains("zoo"));
 
+        // now we need to save it to a file
+
+        // get the bit array
+        // save it to a file
+
 
     }
 
