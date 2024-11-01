@@ -43,7 +43,7 @@ public class BloomFilter {
 
     // Takes size of element list (nElements) and builds the
     // bit array based on the DSF and number of elements expected.
-    // true - if the bit array was successfully allocated
+    // true - if the bit array was successfully allocated and cleared
     // false - if the bit array was unsuccessfully allocated
     public boolean build(int nElements) {
         int bitsRequired = calculateBitArraySize(DSF, nElements);
@@ -56,11 +56,21 @@ public class BloomFilter {
         return true;
     }
 
+    // Takes a pre-built bit array and sets this filter's bit array
+    // to the new set. Does not allocate new space. The new set
+    // should not be modified after passing to build method.
+    public boolean build(BitSet set) {
+        this.bitArray = set;
+        return true;
+    }
+
     // Adds a new member to the member set.
     // The member set must be built first,
     // no element rejected otherwise.
     public boolean add(String element) {
-        if (bitArray == null) { return false; }
+        if (bitArray == null) {
+            throw new IllegalStateException("Bloom filter not initialized. Call build() first.");
+        }
 
         long[] hashes = quickHash.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
@@ -78,7 +88,9 @@ public class BloomFilter {
     // true - element exists in set
     // false - element does not exist in set
     public boolean contains(String element) {
-        if (bitArray == null) { return false; }
+        if (bitArray == null) {
+            throw new IllegalStateException("Bloom filter not initialized. Call build() first.");
+        }
 
         long[] hashes = quickHash.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
