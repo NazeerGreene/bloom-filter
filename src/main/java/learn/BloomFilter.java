@@ -119,37 +119,37 @@ public class BloomFilter {
 
     // calculate bit array size
     // using this equation
-    // size = - n * ln(p) / (ln 2)^2
+    // size = - nElements * ln(dsf) / (ln 2)^2
     // where:
-    // double p = desired false positive
-    // int n = number of elements inserted
-    public static int calculateBitArraySize(double p, int n) {
+    // dsf = desired false positive probability
+    // nElements = number of elements inserted
+    public static int calculateBitArraySize(double desiredFalsePositive, int nElements) {
         // Input validation
-        if (p <= 0 || p >= 1) {
+        if (desiredFalsePositive <= 0 || desiredFalsePositive >= 1) {
             throw new IllegalArgumentException("False positive rate must be between 0 and 1");
         }
-        if (n <= 0) {
+        if (nElements <= 0) {
             throw new IllegalArgumentException("Number of elements must be positive");
         }
 
-        double bitArraySize = - n * Math.log(p) / Math.pow(Math.log(2), 2);
+        double bitArraySize = - nElements * Math.log(desiredFalsePositive) / Math.pow(Math.log(2), 2);
         return (int) Math.ceil(bitArraySize);
     }
     // calculate optimal number of hash functions
     // using this equation
-    // num of hash = m * ln(2) / n
+    // num of hash = bitArraySize * ln(2) / nElements
     // where:
-    // int m = bit array size
-    // int n = number of elements inserted
-    public static int calculateNumOfHashFunctions(int m, int n) {
-        if (m <= 0) {
+    // int bitArraySize = the size of the bit array
+    // int nElements = number of elements inserted
+    public static int calculateNumOfHashFunctions(int bitArraySize, int nElements) {
+        if (bitArraySize <= 0) {
             throw new IllegalArgumentException("Bit array size must be positive");
         }
-        if (n <= 0) {
+        if (nElements <= 0) {
             throw new IllegalArgumentException("Number of elements must be positive");
         }
 
-        double optimalHashes = (double) m / n * Math.log(2);
+        double optimalHashes = (double) bitArraySize / nElements * Math.log(2);
         return (int) Math.ceil(optimalHashes);
     }
 //    NOTE
@@ -162,12 +162,12 @@ public class BloomFilter {
     // DSF - 'Desired False Positive' probability for bloom filter
     public static void outputAppRequirements(int nElements, double DSF) {
 
-        double bitsPerByte = 8.0;     // bits per Mb
-        double bytesPerMb = 1024.0; // bytes per Mb
+        double bitsPerByte = 8.0;     // bits per Byte
+        double bytesPerKb = 1024.0; // bytes per Kilobyte
 
         int bitsRequired = calculateBitArraySize(DSF, nElements);
         int bytesRequired = (int) Math.ceil(bitsRequired / bitsPerByte);
-        int mbRequired = (int) Math.ceil(bytesRequired / bytesPerMb);
+        int mbRequired = (int) Math.ceil(bytesRequired / bytesPerKb);
 
         int nHashFunctions = calculateNumOfHashFunctions(bitsRequired, nElements);
 
@@ -178,7 +178,7 @@ public class BloomFilter {
                             \tHash functions:     %d
                             \tNumber of bits:     %d
                             \t\t... %d Bytes
-                            \t\t... %d Mb
+                            \t\t... %d Kb
                             """,
                 nElements, DSF, nHashFunctions, bitsRequired, bytesRequired, mbRequired);
 
