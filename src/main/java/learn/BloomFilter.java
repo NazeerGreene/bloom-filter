@@ -30,7 +30,9 @@ public class BloomFilter {
         this.bitArray = null;
     }
 
-    // Returns the desired false positive probability
+    /**
+     * Returns the desired false positive probability
+     */
     public double getDSF() {
         return DSF;
     }
@@ -40,6 +42,13 @@ public class BloomFilter {
      */
     public int[] getSeeds() {
         return Arrays.copyOf(seeds, seeds.length);
+    }
+
+    /**
+     * Returns the underlying bit array
+     */
+    public BitSet getBitArray() {
+        return this.bitArray;
     }
 
     /**

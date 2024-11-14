@@ -1,19 +1,19 @@
 package learn;
 
+import learn.dictionary.Read;
+import learn.dictionary.Write;
 import learn.hash.FNV1A64;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class App {
     public static void main(String[] args) throws IOException {
         String filePath = "./data/dict-sub.txt";
+        String compiledFilePath = "./data/dict-compiled.bf";
         int[] seeds = new int[]{1,2,3,4,5,6,7,8,9,10};
 
         int nElements = (int) countNewlines(filePath);
@@ -27,16 +27,7 @@ public class App {
 
         // first pass - reading all elements in dict to bloom filter
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            // no need to skip any line
-            for(String line = reader.readLine(); line != null; line = reader.readLine()) {
-                filter.add(line.toLowerCase(Locale.ROOT));
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        } catch (IOException e) {
-            throw new RuntimeException("Could not open file: " + filePath, e);
-        }
+        Read.rawSource(filePath, filter);
 
         // now check for some values we know to be present
         List<String> to_test = List.of("aardvark", "abduction", "absconce");
@@ -49,9 +40,9 @@ public class App {
         System.out.println("Querying for 'zoo' [false]: " + filter.contains("zoo"));
 
         // now we need to save it to a file
+        Write.toBinaryFile(compiledFilePath, filter.getBitArray().toByteArray());
 
-        // get the bit array
-        // save it to a file
+
 
 
     }
