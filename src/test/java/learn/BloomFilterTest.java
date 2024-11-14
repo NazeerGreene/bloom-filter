@@ -1,6 +1,7 @@
 package learn;
 
 import learn.hash.FNV1A64;
+import learn.utils.BloomFilter;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -9,16 +10,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BloomFilterTest {
     int N_ELEMENTS = 10_000;
-    double DSF = 0.01;
+    double DFP = 0.01;
     int[] seeds = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    int BITS_REQUIRED = BloomFilter.calculateBitArraySize(DSF, N_ELEMENTS);
+    int BITS_REQUIRED = BloomFilter.calculateBitArraySize(DFP, N_ELEMENTS);
     int N_HASH_FUNCTIONS = BloomFilter.calculateNumOfHashFunctions(BITS_REQUIRED, N_ELEMENTS);
 
     BloomFilter filter = null;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-        filter = new BloomFilter(DSF, new FNV1A64(), Arrays.copyOf(seeds, 6));
+        filter = new BloomFilter(DFP, new FNV1A64(), Arrays.copyOf(seeds, 6));
         filter.build(N_ELEMENTS);
     }
 

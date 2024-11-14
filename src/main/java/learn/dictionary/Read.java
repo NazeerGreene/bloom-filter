@@ -1,6 +1,6 @@
 package learn.dictionary;
 
-import learn.BloomFilter;
+import learn.utils.BloomFilter;
 
 import java.io.*;
 import java.util.Locale;

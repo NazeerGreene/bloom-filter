@@ -1,8 +1,10 @@
 package learn;
 
+import learn.controller.Controller;
 import learn.dictionary.Read;
 import learn.dictionary.Write;
 import learn.hash.FNV1A64;
+import learn.utils.BloomFilter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,6 +14,15 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) throws IOException {
+
+
+        Controller controller = new Controller();
+        controller.run(List.of(args));
+
+
+    }
+
+    public static void manualTesting() throws IOException {
         String filePath = "./data/dict-sub.txt";
         String compiledFilePath = "./data/dict-compiled.bf";
         int[] seeds = new int[]{1,2,3,4,5,6,7,8,9,10};
@@ -36,15 +47,10 @@ public class App {
             System.out.println("Querying for '" + element + "' [true]: " + filter.contains(element));
         }
 
-
         System.out.println("Querying for 'zoo' [false]: " + filter.contains("zoo"));
 
         // now we need to save it to a file
         Write.toBinaryFile(compiledFilePath, filter.getBitArray().toByteArray());
-
-
-
-
     }
 
     public static long countNewlines(String filePath) throws IOException {

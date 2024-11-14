@@ -1,4 +1,4 @@
-package learn;
+package learn.utils;
 
 import learn.hash.QuickHash;
 
@@ -8,23 +8,23 @@ import java.util.BitSet;
 
 public class BloomFilter {
     private BitSet bitArray;
-    private final double DSF; // desired false positive probability
+    private final double DFP; // desired false positive probability
     private final int[] seeds;
     private final QuickHash quickHash;
 
-    public static double DSF_MAX = 1.0;
-    public static double DSF_MIN =  0.0;
-    public static double DSF_DEFAULT = 0.01;
+    public static double DFP_MAX = 1.0;
+    public static double DFP_MIN =  0.0;
+    public static double DFP_DEFAULT = 0.01;
 
-    public BloomFilter(double DSF, QuickHash quickHash, int[] seeds) {
-        this.DSF = isValidDsf(DSF) ?  DSF : DSF_DEFAULT;
+    public BloomFilter(double DFP, QuickHash quickHash, int[] seeds) {
+        this.DFP = isValidDsf(DFP) ? DFP : DFP_DEFAULT;
         this.seeds = seeds;
         this.quickHash = quickHash;
         this.bitArray = null;
     }
 
     public BloomFilter(BloomFilter other) {
-        this.DSF = other.DSF;
+        this.DFP = other.DFP;
         this.seeds = other.getSeeds();
         this.quickHash = other.quickHash;
         this.bitArray = null;
@@ -33,8 +33,8 @@ public class BloomFilter {
     /**
      * Returns the desired false positive probability
      */
-    public double getDSF() {
-        return DSF;
+    public double getDFP() {
+        return DFP;
     }
 
     /**
@@ -58,7 +58,7 @@ public class BloomFilter {
      *         false If the bit array was not successfully allocated
      */
     public boolean build(int nElements) {
-        int bitsRequired = calculateBitArraySize(DSF, nElements);
+        int bitsRequired = calculateBitArraySize(DFP, nElements);
         try {
             this.bitArray = new BitSet(bitsRequired);
             bitArray.clear();
@@ -124,8 +124,8 @@ public class BloomFilter {
 
     // ----------------------------- HELPERS -----------------------------
 
-    private boolean isValidDsf(double dsf) {
-        return dsf >= DSF_MIN && dsf <= DSF_MAX;
+    private boolean isValidDsf(double dfp) {
+        return dfp >= DFP_MIN && dfp <= DFP_MAX;
     }
 
     private int getIndexFromHash(long hash) {
@@ -134,7 +134,7 @@ public class BloomFilter {
     }
 
     /**
-     * Calculate the bit array size according to the following equation: -nElements * ln(dsf) / (ln 2)^2
+     * Calculate the bit array size according to the following equation: -nElements * ln(dfp) / (ln 2)^2
      * @param desiredFalsePositive The desired false positive probability
      * @param nElements The number of elements inserted
      * @return The suggested size of the bit array for the Bloom filter
@@ -176,14 +176,14 @@ public class BloomFilter {
     /**
      * Outputs basic memory requirements for bloom filter to stdin
      * @param nElements The number of elements inserted
-     * @param DSF  The desired false positive probability for a bloom filter
+     * @param DFP  The desired false positive probability for a bloom filter
      */
-    public static void outputAppRequirements(int nElements, double DSF) {
+    public static void outputAppRequirements(int nElements, double DFP) {
 
         double bitsPerByte = 8.0;     // bits per Byte
         double bytesPerKb = 1024.0; // bytes per Kilobyte
 
-        int bitsRequired = calculateBitArraySize(DSF, nElements);
+        int bitsRequired = calculateBitArraySize(DFP, nElements);
         int bytesRequired = (int) Math.ceil(bitsRequired / bitsPerByte);
         int mbRequired = (int) Math.ceil(bytesRequired / bytesPerKb);
 
@@ -198,7 +198,7 @@ public class BloomFilter {
                             \t\t... %d Bytes
                             \t\t... %d Kb
                             """,
-                nElements, DSF, nHashFunctions, bitsRequired, bytesRequired, mbRequired);
+                nElements, DFP, nHashFunctions, bitsRequired, bytesRequired, mbRequired);
 
         System.out.println(out);
     }
