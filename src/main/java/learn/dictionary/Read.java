@@ -18,7 +18,7 @@ public class Read {
      * @param filter The filter to add elements to
      * @throws IOException If problems occur reading the text file
      */
-    public static void rawSource(String filename, BloomFilter filter) throws IOException {
+    public static void fromRawSource(String filename, BloomFilter filter) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             // no need to skip any line
             for(String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -37,7 +37,7 @@ public class Read {
      * @return The already-compiled bit array
      * @throws IOException If problems occur reading the binary file
      */
-    public static byte[] compiledSource(String filename) throws IOException {
+    public static byte[] fromCompiledSource(String filename) throws IOException {
         try (FileInputStream fis = new FileInputStream(filename);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 

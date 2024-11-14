@@ -1,5 +1,7 @@
 package learn.controller;
 
+import learn.dictionary.Read;
+import learn.dictionary.Write;
 import learn.hash.FNV1A64;
 import learn.hash.QuickHash;
 import learn.utils.BloomFilter;
@@ -7,6 +9,7 @@ import learn.utils.BloomFilter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
@@ -20,7 +23,6 @@ public class Controller {
 
     // File locations
     private static final String dataDirectory = "./data/test/";
-    private static final String rawDictionary = "dict-sub.txt";
     private static final String compiledDictionary = "dict-compiled.bf";
     private static final String seedsFile = "seeds.csv";
 
@@ -45,11 +47,37 @@ public class Controller {
         this.seeds = readSeedsFromCSV();
     }
 
-    // either we build the filter or we check the filter
+    // either we build the filter or we check the filter for members
 
-    public void run(List<String> args) {}
+    public void run(List<String> args) throws IOException {
+        build("./data/test/dict-sub.txt");
+    }
 
-    void build(String textFilePath) {};
+    boolean build(String rawDictionary) throws IOException {
+        String compiledFilePath = dataDirectory + compiledDictionary;
+
+        // first we should verify that we have all the necessary components
+        int nElementsInDictionary = countNewlines(rawDictionary);
+        int bitsRequired = BloomFilter.calculateBitArraySize(desiredFP, nElementsInDictionary);
+        int nHashFunctions = BloomFilter.calculateNumOfHashFunctions(bitsRequired, nElementsInDictionary);
+
+        if (null == seeds || seeds.length < nHashFunctions) {
+            return false;
+        }
+
+        // build the filter
+        filter = new BloomFilter(desiredFP, hash, Arrays.copyOf(seeds, nHashFunctions));
+        filter.build(nElementsInDictionary);
+
+        // add elements to filter
+        Read.fromRawSource(rawDictionary, filter);
+
+        // save filter to memory
+        Write.toBinaryFile(compiledFilePath, filter.getBitArray().toByteArray());
+
+        // finished
+        return true;
+    };
 
     void check(List<String> toCheck) {
 
@@ -58,7 +86,7 @@ public class Controller {
     // helpers
 
     private int[] readSeedsFromCSV() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(seedsFile))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(dataDirectory + seedsFile))) {
             String line = reader.readLine();
             if (line == null) {
                 return null;  // empty file
@@ -79,8 +107,8 @@ public class Controller {
         return false;
     }
 
-    private static long countNewlines(String filePath) throws IOException {
-        long count = 0;
+    private static int countNewlines(String filePath) throws IOException {
+        int count = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             while (reader.readLine() != null) {
                 count++;

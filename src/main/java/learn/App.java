@@ -13,12 +13,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class App {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-
-        Controller controller = new Controller();
-        controller.run(List.of(args));
-
+        try{
+            Controller controller = new Controller();
+            controller.run(List.of(args));
+        } catch (IOException e) {
+            System.out.println("Error while running application: " + e.getMessage());
+        }
 
     }
 
@@ -38,7 +40,7 @@ public class App {
 
         // first pass - reading all elements in dict to bloom filter
 
-        Read.rawSource(filePath, filter);
+        Read.fromRawSource(filePath, filter);
 
         // now check for some values we know to be present
         List<String> to_test = List.of("aardvark", "abduction", "absconce");
