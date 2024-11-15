@@ -6,15 +6,15 @@ import learn.hash.FNV1A64;
 import learn.hash.QuickHash;
 import learn.utils.BloomFilter;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 
-public class Controller {
-    View view = new View();
+import static learn.dictionary.Read.countNewlines;
 
+public class Controller {
     // Related to Bloom filter
     private BloomFilter filter;
     private double desiredFP; // false positivity probability
@@ -22,9 +22,9 @@ public class Controller {
     private int[] seeds;
 
     // File locations
-    private static final String dataDirectory = "./data/test/";
-    private static final String compiledDictionary = "dict-compiled.bf";
-    private static final String seedsFile = "seeds.csv";
+    private static final String DATA_DIRECTORY = "./data/test/";
+    private static final String COMPILED_DICTIONARY_PATH = DATA_DIRECTORY + "dict-compiled.bf";
+    private static final String SEEDS_FILE = DATA_DIRECTORY + "seeds.csv";
 
     // setters
     public void setDesiredFP(double newValue) {
@@ -44,17 +44,23 @@ public class Controller {
         this.filter = null;
         this.desiredFP = BloomFilter.DFP_DEFAULT;
         this.hash = new FNV1A64();
-        this.seeds = readSeedsFromCSV();
+        this.seeds = Read.getSeedsFromCSV(SEEDS_FILE);
     }
 
     // either we build the filter or we check the filter for members
-
     public void run(List<String> args) throws IOException {
-        build("./data/test/dict-sub.txt");
+        //build("./data/test/dict-sub.txt");
+        List<String> notFound = check(List.of("aardvark", "abduction", "absconce", "zoo"));
+        System.out.println("Not Found");
+        if (notFound != null) {
+            notFound.stream().forEach(element -> System.out.println(element));
+        }
     }
 
-    boolean build(String rawDictionary) throws IOException {
-        String compiledFilePath = dataDirectory + compiledDictionary;
+    private boolean build(String rawDictionary) throws IOException {
+        if (null == rawDictionary) {
+            return false;
+        }
 
         // first we should verify that we have all the necessary components
         int nElementsInDictionary = countNewlines(rawDictionary);
@@ -70,50 +76,40 @@ public class Controller {
         filter.build(nElementsInDictionary);
 
         // add elements to filter
-        Read.fromRawSource(rawDictionary, filter);
+        Read.dictFromRawSource(rawDictionary, filter);
 
         // save filter to memory
-        Write.toBinaryFile(compiledFilePath, filter.getBitArray().toByteArray());
+        Write.dictToBinaryFile(COMPILED_DICTIONARY_PATH, filter.getBitArray().toByteArray());
+        Write.seedsToCsvFile(SEEDS_FILE, filter.getSeeds());
 
         // finished
         return true;
     };
 
-    void check(List<String> toCheck) {
+    private List<String> check(List<String> elementsToCheck) throws IOException {
+        // read the dictionary from memory
+        byte[] dictionaryBinaryData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH);
 
-    }
+        // build the filter
+        BitSet data = BitSet.valueOf(dictionaryBinaryData);
+        filter = new BloomFilter(desiredFP, hash, seeds);
+        filter.build(data);
 
-    // helpers
-
-    private int[] readSeedsFromCSV() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(dataDirectory + seedsFile))) {
-            String line = reader.readLine();
-            if (line == null) {
-                return null;  // empty file
-            }
-
-            String[] values = line.split(",");
-            int[] result = new int[values.length];
-
-            for (int i = 0; i < values.length; i++) {
-                result[i] = Integer.parseInt(values[i].trim());
-            }
-
-            return result;
+        if (null == filter) {
+            return null;
         }
-    }
 
-    private boolean checkForCompiledSource(String filename) {
-        return false;
-    }
+        // for each element to check, run through filter
+        ArrayList<String> notFound = new ArrayList<>();
 
-    private static int countNewlines(String filePath) throws IOException {
-        int count = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            while (reader.readLine() != null) {
-                count++;
+        for(String element: elementsToCheck) {
+            if (!filter.contains(element)) {
+                notFound.add(element);
             }
         }
-        return count > 0 ? count - 1 : 0; // Subtract 1 because last line doesn't end with newline
+
+        // return list
+        return notFound;
     }
+
 }
