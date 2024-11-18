@@ -1,6 +1,7 @@
 package learn.dictionary;
 
 import learn.utils.BloomFilter;
+import learn.utils.BuildInfo;
 
 import java.io.*;
 import java.util.Locale;
@@ -40,6 +41,13 @@ public class Read {
     public static byte[] dictFromCompiledSource(String filename) throws IOException {
         try (FileInputStream fis = new FileInputStream(filename);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+
+            // skip header for now
+            long ignored = fis.skip(BuildInfo.HEADER_SIZE);
+
+            if (ignored != BuildInfo.HEADER_SIZE) {
+                return null; // filter will be corrupted if header not skipped
+            }
 
             byte[] buffer = new byte[4096];
             int bytesRead;

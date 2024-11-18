@@ -13,7 +13,6 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) throws IOException {
-
         controllerRun();
     }
 
@@ -51,7 +50,7 @@ public class App {
         }
 
         // now we need to save it to a file
-        Write.dictToBinaryFile(compiledFilePath, filter.getBitArray().toByteArray());
+        Write.dictToBinaryFile(compiledFilePath, null, filter.getBitArray().toByteArray());
 
         // now we need to read from file to make sure save is working properly
         BloomFilter newFilter = new BloomFilter(dsf, new FNV1A64(), Arrays.copyOf(seeds, nHashFunctions));

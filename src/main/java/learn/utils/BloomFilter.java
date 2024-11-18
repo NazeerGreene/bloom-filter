@@ -176,7 +176,7 @@ public class BloomFilter {
     /**
      * Outputs basic memory requirements for bloom filter to stdin
      * @param nElements The number of elements inserted
-     * @param DFP  The desired false positive probability for a bloom filter
+     * @param DFP The desired false positive probability for a bloom filter
      */
     public static void outputAppRequirements(int nElements, double DFP) {
 
