@@ -19,7 +19,7 @@ class BloomFilterTest {
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-        filter = new BloomFilter(DFP, new FNV1A64(), Arrays.copyOf(seeds, 6));
+        filter = new BloomFilter(DFP, FNV1A64::hash, Arrays.copyOf(seeds, 6));
         filter.build(N_ELEMENTS);
     }
 

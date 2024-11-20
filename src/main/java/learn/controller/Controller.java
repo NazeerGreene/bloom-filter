@@ -51,13 +51,13 @@ public class Controller {
     public Controller() throws IOException {
         this.filter = null;
         this.desiredFP = BloomFilter.DFP_DEFAULT;
-        this.hash = new FNV1A64();
+        this.hash = FNV1A64::hash;
         this.seeds = Read.getSeedsFromCSV(SEEDS_FILE);
     }
 
     // either we build the filter or we check the filter for members
     public void run(List<String> args) throws IOException {
-        buildFilter("./data/test/dict-sub.txt");
+//        buildFilter("./data/test/dict-sub.txt");
 //        List<String> notFound = checkFilterFor(List.of("aardvark", "abduction", "absconce", "zoo"));
 //        System.out.println("Not Found");
 //        if (notFound != null) {

@@ -36,7 +36,7 @@ public class App {
         int bitsRequired = BloomFilter.calculateBitArraySize(dsf, nElements);
         int nHashFunctions = BloomFilter.calculateNumOfHashFunctions(bitsRequired, nElements);
 
-        BloomFilter filter = new BloomFilter(dsf, new FNV1A64(), Arrays.copyOf(seeds, nHashFunctions));
+        BloomFilter filter = new BloomFilter(dsf, FNV1A64::hash, Arrays.copyOf(seeds, nHashFunctions));
         filter.build(nElements);
 
         // first pass - reading all elements in dict to bloom filter
@@ -53,7 +53,7 @@ public class App {
         Write.dictToBinaryFile(compiledFilePath, null, filter.getBitArray().toByteArray());
 
         // now we need to read from file to make sure save is working properly
-        BloomFilter newFilter = new BloomFilter(dsf, new FNV1A64(), Arrays.copyOf(seeds, nHashFunctions));
+        BloomFilter newFilter = new BloomFilter(dsf, FNV1A64::hash, Arrays.copyOf(seeds, nHashFunctions));
         byte[] data = Read.dictFromCompiledSource(compiledFilePath);
         newFilter.build(BitSet.valueOf(data));
 

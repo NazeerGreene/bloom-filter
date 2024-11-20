@@ -90,7 +90,7 @@ public class BloomFilter {
             throw new IllegalArgumentException("element cannot be null");
         }
 
-        long[] hashes = quickHash.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
+        long[] hashes = this.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
         for (long hash: hashes) {
             int index = getIndexFromHash(hash);
@@ -112,7 +112,7 @@ public class BloomFilter {
             throw new IllegalStateException("Bloom filter not initialized. Call build() first.");
         }
 
-        long[] hashes = quickHash.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
+        long[] hashes = this.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
         for (long hash: hashes) {
             int index = getIndexFromHash(hash);
@@ -137,8 +137,14 @@ public class BloomFilter {
         return Math.abs((int) ((hash & 0x7FFFFFFFFFFFFFFFL) % bitArray.size()));
     }
 
-    private long hash_k_times(byte[] data, int[] seeds) {
+    private long[] hash_k_times(byte[] data, int[] seeds) {
+        long[] hashValues = new long[seeds.length];
 
+        for (int i = 0; i < seeds.length; i++) {
+            hashValues[i] = this.quickHash.hash(data, seeds[i]);
+        }
+
+        return hashValues;
     }
 
     /**
