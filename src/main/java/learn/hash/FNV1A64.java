@@ -9,14 +9,24 @@ import java.nio.ByteBuffer;
  *   Fast computation but
  *   vulnerable to brute-force collisions.
  */
-public class FNV1A64 implements QuickHash {
+public class FNV1A64 {
     // these constants are mathematically derived for 64-bit length hashes
     private static final long FNV_OFFSET_BASIS_64 = 0xcbf29ce484222325L;
     private static final long FNV_PRIME_64 = 0x100000001b3L;
 
-    @Override
-    public long hash(byte[] data, int seed) {
-        // the seed doesn't matter in this case
+    private FNV1A64() {};
+
+    public static long hash(byte[] data, int seed) throws IllegalArgumentException {
+        if (null == data) {
+            throw new IllegalArgumentException("byte stream cannot be null");
+        }
+
+        long firstPass = hashByteStream(data) ^ seed;
+
+        return hashByteStream(longToByteArray(firstPass));
+    }
+
+    private static long hashByteStream(byte[] data) {
         long hash = FNV_OFFSET_BASIS_64;
 
         for (byte b: data) {
@@ -28,29 +38,7 @@ public class FNV1A64 implements QuickHash {
         return hash;
     }
 
-    @Override
-    public long[] hash_k_times(byte[] data, int[] seeds) {
-        long[] hashValues = new long[seeds.length];
-
-        for (int i = 0; i < seeds.length; i++) {
-            hashValues[i] = getHashWithIdentifier(data, i);
-        }
-
-        return hashValues;
-    }
-
-    // Helper Functions
-
-    // The FNV hashing algorithm doesn't use seeds to create its hash values,
-    // so we will instead create a hash, write the identifier into the hash,
-    // and then re-hash; this creates a unique hash value.
-    private long getHashWithIdentifier(byte[] data, int identifier) {
-        // XORing the identifier is enough to make it enough
-        long hashValue = this.hash(data, 0) ^ identifier;
-        return this.hash(longToByteArray(hashValue), 0);
-    }
-
-    // Helper function for getHashWithIdentifier
+    // Helper function: long to byte array converter
     private static byte[] longToByteArray(long value) {
         // java uses big-endian order by default
         // allocation overhead could be costly for 100s of 1000s of calls.

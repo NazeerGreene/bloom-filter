@@ -86,6 +86,10 @@ public class BloomFilter {
             throw new IllegalStateException("Bloom filter not initialized. Call build() first.");
         }
 
+        if (null == element) {
+            throw new IllegalArgumentException("element cannot be null");
+        }
+
         long[] hashes = quickHash.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
         for (long hash: hashes) {
@@ -131,6 +135,10 @@ public class BloomFilter {
     private int getIndexFromHash(long hash) {
         // Handle potential integer overflow and negative numbers
         return Math.abs((int) ((hash & 0x7FFFFFFFFFFFFFFFL) % bitArray.size()));
+    }
+
+    private long hash_k_times(byte[] data, int[] seeds) {
+
     }
 
     /**
