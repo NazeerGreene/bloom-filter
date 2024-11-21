@@ -38,17 +38,22 @@ public class Read {
      * @return The already-compiled bit array
      * @throws IOException If problems occur reading the binary file
      */
-    public static byte[] dictFromCompiledSource(String filename) throws IOException {
+    public static byte[] dictFromCompiledSource(String filename, BuildInfo dst) throws IOException {
         try (FileInputStream fis = new FileInputStream(filename);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
-            // skip header for now
-            long ignored = fis.skip(BuildInfo.HEADER_SIZE);
+            // reading the header
+            byte[] headerBytes = fis.readNBytes(BuildInfo.HEADER_SIZE);
 
-            if (ignored != BuildInfo.HEADER_SIZE) {
-                return null; // filter will be corrupted if header not skipped
+            if (headerBytes.length != BuildInfo.HEADER_SIZE) {
+                throw new IOException("Unexpected read error while scanning dictionary file for version information");
             }
 
+            if (null != dst) {
+                dst = BuildInfo.readBuildInfo(headerBytes);
+            }
+
+            // reading the dictionary
             byte[] buffer = new byte[4096];
             int bytesRead;
 

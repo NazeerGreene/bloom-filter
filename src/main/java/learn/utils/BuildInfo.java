@@ -50,4 +50,8 @@ public final class BuildInfo {
         return header.array();
     }
 
+    public static BuildInfo readBuildInfo(byte[] header) {
+        return null;
+    }
+
 }
