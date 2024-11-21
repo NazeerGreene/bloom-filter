@@ -210,7 +210,7 @@ public class BloomFilter {
                             \tHash functions:     %d
                             \tNumber of bits:     %d
                             \t\t... %d Bytes
-                            \t\t... %d Kb
+                            \t\t... %d KB
                             """,
                 nElements, DFP, nHashFunctions, bitsRequired, bytesRequired, mbRequired);
 

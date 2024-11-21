@@ -40,8 +40,10 @@ public class FNV1A64 {
 
     // Helper function: long to byte array converter
     private static byte[] longToByteArray(long value) {
-        // java uses big-endian order by default
-        // allocation overhead could be costly for 100s of 1000s of calls.
-        return ByteBuffer.allocate(Long.BYTES).putLong(value).array();
+        byte[] result = new byte[8];
+        for (int i = 0; i < 8; i++) {
+            result[i] = (byte) ((value >> (56 - (i * 8))) & 0xFF);
+        }
+        return result;
     }
 }
