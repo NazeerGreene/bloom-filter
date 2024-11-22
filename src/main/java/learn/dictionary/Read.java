@@ -38,7 +38,7 @@ public class Read {
      * @return The already-compiled bit array
      * @throws IOException If problems occur reading the binary file
      */
-    public static byte[] dictFromCompiledSource(String filename, BuildInfo dst) throws IOException {
+    public static DictionaryData dictFromCompiledSource(String filename) throws IOException {
         try (FileInputStream fis = new FileInputStream(filename);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
@@ -49,10 +49,7 @@ public class Read {
                 throw new IOException("Unexpected read error while scanning dictionary file for version information");
             }
 
-            BuildInfo compiled = BuildInfo.readBuildInfo(headerBytes);
-            dst.setVersion(compiled.getVersion());
-            dst.setBloomFilterBitsRequired(compiled.getBloomFilterBitsRequired());
-            dst.setHashFunctions(compiled.getNHashFunctions());
+            BuildInfo header = BuildInfo.readBuildInfo(headerBytes);
 
             // reading the dictionary
             byte[] buffer = new byte[4096];
@@ -62,7 +59,7 @@ public class Read {
                 baos.write(buffer, 0, bytesRead);
             }
 
-            return baos.toByteArray();
+            return new DictionaryData(header, baos.toByteArray());
         }
     }
 

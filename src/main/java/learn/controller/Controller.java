@@ -1,5 +1,6 @@
 package learn.controller;
 
+import learn.dictionary.DictionaryData;
 import learn.dictionary.Read;
 import learn.dictionary.Write;
 import learn.hash.FNV1A64;
@@ -135,11 +136,10 @@ public class Controller {
      */
     private List<String> checkFilterFor(List<String> elementsToCheck) throws IOException {
         // read the dictionary from memory
-        BuildInfo compiledHeader = new BuildInfo();
-        byte[] dictionaryBinaryData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH, compiledHeader);
+        DictionaryData dData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH);
 
         // build the filter
-        BitSet data = BitSet.valueOf(dictionaryBinaryData);
+        BitSet data = BitSet.valueOf(dData.dictionary);
         filter = new BloomFilter(desiredFP, hash, seeds);
         filter.build(data);
 
