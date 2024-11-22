@@ -138,10 +138,17 @@ public class Controller {
         // read the dictionary from memory
         DictionaryData dData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH);
 
+        if (!isCorrectVersion(dData.header)) {
+            throw new Error("Incorrect program version from compiled dictionary.");
+        }
+
+        if (!isCorrectFilterConfigurations(dData.header)) {
+            throw new Error("Incorrect bloom filter configurations detected from compiled dictionary.");
+        }
+
         // build the filter
-        BitSet data = BitSet.valueOf(dData.dictionary);
         filter = new BloomFilter(desiredFP, hash, seeds);
-        filter.build(data);
+        filter.build(dData.dictionary);
 
         if (null == filter) {
             return null;
@@ -158,5 +165,16 @@ public class Controller {
 
         // return list
         return notFound;
+    }
+
+    private boolean isCorrectVersion(BuildInfo other) {
+        if (other == null) {
+            return false; // incorrect header detected
+        }
+        return other.getVersion() == this.versionInfo.getVersion();
+    }
+
+    private boolean isCorrectFilterConfigurations(BuildInfo other) {
+        return this.seeds.length >= other.getNHashFunctions();
     }
 }

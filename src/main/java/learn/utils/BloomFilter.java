@@ -70,11 +70,9 @@ public class BloomFilter {
 
     /**
      * Sets the underlying bit array to the new bit array without occupying new memory
-     * @param set The new BitSet
      */
-    public boolean build(BitSet set) {
-        this.bitArray = set;
-        return true;
+    public void build(byte[] data) {
+        this.bitArray = BitSet.valueOf(data);
     }
 
     /**
