@@ -28,6 +28,7 @@ public class Controller {
     private double desiredFP; // false positivity probability
     private QuickHash hash;
     private int[] seeds;
+    private BuildInfo versionInfo;
 
     // File locations
     private static final String DATA_DIRECTORY = "./data/test/";
@@ -53,6 +54,8 @@ public class Controller {
         this.desiredFP = BloomFilter.DFP_DEFAULT;
         this.hash = FNV1A64::hash;
         this.seeds = Read.getSeedsFromCSV(SEEDS_FILE);
+        this.versionInfo = new BuildInfo()
+                .setVersion((short) 1);
     }
 
     // either we build the filter or we check the filter for members
@@ -109,7 +112,11 @@ public class Controller {
         Read.dictFromRawSource(rawDictionary, filter);
 
         // save filter to memory
-        byte[] header = new BuildInfo((short) nHashFunctions, bitsRequired).generateByteHeader();
+        byte[] header = versionInfo
+                .setHashFunctions((short) nHashFunctions)
+                .setBloomFilterBitsRequired((short) bitsRequired)
+                .generateByteHeader();
+
         byte[] dictionary = filter.getBitArray().toByteArray();
 
         Write.dictToBinaryFile(COMPILED_DICTIONARY_PATH, header, dictionary);
@@ -128,7 +135,8 @@ public class Controller {
      */
     private List<String> checkFilterFor(List<String> elementsToCheck) throws IOException {
         // read the dictionary from memory
-        byte[] dictionaryBinaryData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH, null);
+        BuildInfo compiledHeader = new BuildInfo();
+        byte[] dictionaryBinaryData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH, compiledHeader);
 
         // build the filter
         BitSet data = BitSet.valueOf(dictionaryBinaryData);

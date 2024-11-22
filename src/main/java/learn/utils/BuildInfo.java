@@ -1,31 +1,48 @@
 package learn.utils;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 public final class BuildInfo {
-    // CONSTANTS
-    public static final String IDENTIFIER = "SCBF"; // must remain 4 bytes
-    public static final short VERSION = 1;
-
-    // The bytes required to hold (IDENTIFIER + VERSION + HASH FUNCTIONS + BITS REQUIRED)
-    public static final int HEADER_SIZE = 12; // size of (
+    public static final String DEFAULT_IDENTIFIER = "BFSC";
 
     // IMPLEMENTATION-DEPENDENT
+    private short version;
     private short nHashFunctions;
     private int bloomFilterBitsRequired;
 
-    public BuildInfo(short nHashFunctions, int bitsRequired) {
+    public BuildInfo() {}
+
+    public BuildInfo setVersion(short version) {
+        this.version = version;
+        return this;
+    }
+
+    public BuildInfo setHashFunctions(short nHashFunctions) {
         this.nHashFunctions = nHashFunctions;
-        this.bloomFilterBitsRequired = bitsRequired;
+        return this;
     }
 
-    public void setHashFunctions(short hashFunctions) {
-        this.nHashFunctions = hashFunctions;
-    }
-
-    public void setBloomFilterBitsRequired(int bloomFilterBitsRequired) {
+    public BuildInfo setBloomFilterBitsRequired(int bloomFilterBitsRequired) {
         this.bloomFilterBitsRequired = bloomFilterBitsRequired;
+        return this;
+    }
+
+    public short getNHashFunctions() {
+        return nHashFunctions;
+    }
+
+    public short getVersion() {
+        return version;
+    }
+
+    public int getBloomFilterBitsRequired() {
+        return bloomFilterBitsRequired;
+    }
+
+    public static int headerByteSize() {
+        return BuildInfo.DEFAULT_IDENTIFIER.length() + 2 * Short.BYTES + Integer.BYTES;
     }
 
     /**
@@ -38,20 +55,50 @@ public final class BuildInfo {
      * @return byte[] byte-encoded header
      */
     public byte[] generateByteHeader() {
-        ByteBuffer header = ByteBuffer.allocate(BuildInfo.HEADER_SIZE);
+        ByteBuffer header = ByteBuffer.allocate(BuildInfo.headerByteSize());
 
         // write
-        header.put(BuildInfo.IDENTIFIER.getBytes(StandardCharsets.UTF_8));
-        header.putShort(BuildInfo.VERSION);
-        header.putShort(this.nHashFunctions);
-        header.putInt(this.bloomFilterBitsRequired);
+        header.put(BuildInfo.DEFAULT_IDENTIFIER.getBytes(StandardCharsets.US_ASCII));
+        header.putShort(version);
+        header.putShort(nHashFunctions);
+        header.putInt(bloomFilterBitsRequired);
 
 
         return header.array();
     }
 
-    public static BuildInfo readBuildInfo(byte[] header) {
-        return null;
-    }
+    /**
+     * Returns a BuildInfo containing the data for a bloom filter from a byte header
+     * @param data The byte header to read
+     * @return BuildInfo If read is successful
+     *         null If first four bytes don't match the program identifier (BuildInfo.DEFAULT_IDENTIFIER)
+     */
+    public static BuildInfo readBuildInfo(byte[] data) {
+        BuildInfo header = new BuildInfo();
 
+        ByteBuffer buffer = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN);
+
+        // read the data
+        String iden = "" +
+                (char)buffer.get() +
+                (char)buffer.get() +
+                (char)buffer.get() +
+                (char)buffer.get();
+
+
+
+        short version = buffer.getShort();
+        short nHashes = buffer.getShort();
+        int bitsRequired = buffer.getInt();
+
+        if (!iden.equals(BuildInfo.DEFAULT_IDENTIFIER)) {
+            return null;
+        }
+
+        header.setVersion(version);
+        header.setHashFunctions(nHashes);
+        header.setBloomFilterBitsRequired(bitsRequired);
+
+        return header;
+    }
 }

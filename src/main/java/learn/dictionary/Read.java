@@ -43,15 +43,16 @@ public class Read {
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
             // reading the header
-            byte[] headerBytes = fis.readNBytes(BuildInfo.HEADER_SIZE);
+            byte[] headerBytes = fis.readNBytes(BuildInfo.headerByteSize());
 
-            if (headerBytes.length != BuildInfo.HEADER_SIZE) {
+            if (headerBytes.length != BuildInfo.headerByteSize()) {
                 throw new IOException("Unexpected read error while scanning dictionary file for version information");
             }
 
-            if (null != dst) {
-                dst = BuildInfo.readBuildInfo(headerBytes);
-            }
+            BuildInfo compiled = BuildInfo.readBuildInfo(headerBytes);
+            dst.setVersion(compiled.getVersion());
+            dst.setBloomFilterBitsRequired(compiled.getBloomFilterBitsRequired());
+            dst.setHashFunctions(compiled.getNHashFunctions());
 
             // reading the dictionary
             byte[] buffer = new byte[4096];
