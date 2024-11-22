@@ -3,15 +3,11 @@ package learn.controller;
 import learn.dictionary.DictionaryData;
 import learn.dictionary.Read;
 import learn.dictionary.Write;
-import learn.hash.FNV1A64;
-import learn.hash.QuickHash;
 import learn.utils.BloomFilter;
 import learn.utils.BuildInfo;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
 import java.util.List;
 
 import static learn.dictionary.Read.countNewlines;
@@ -26,35 +22,15 @@ import static learn.dictionary.Read.countNewlines;
 public class Controller {
     // Related to Bloom filter
     private BloomFilter filter;
-    private double desiredFP; // false positivity probability
-    private QuickHash hash;
-    private int[] seeds;
-    private BuildInfo versionInfo;
+    private final BuildInfo versionInfo;
 
     // File locations
     private static final String DATA_DIRECTORY = "./data/test/";
     private static final String COMPILED_DICTIONARY_PATH = DATA_DIRECTORY + "dict-compiled.bf";
-    private static final String SEEDS_FILE = DATA_DIRECTORY + "seeds.csv";
-
-    // setters
-    public void setDesiredFP(double newValue) {
-        this.desiredFP = newValue;
-    }
-
-    public void setHash(QuickHash hash) {
-        this.hash = hash;
-    }
-
-    public void setSeeds(int[] seeds) {
-        this.seeds = seeds;
-    }
 
     // Constructors
     public Controller() throws IOException {
         this.filter = null;
-        this.desiredFP = BloomFilter.DFP_DEFAULT;
-        this.hash = FNV1A64::hash;
-        this.seeds = Read.getSeedsFromCSV(SEEDS_FILE);
         this.versionInfo = new BuildInfo()
                 .setVersion((short) 1);
     }
@@ -83,7 +59,7 @@ public class Controller {
         notFound.forEach(System.out::println);
     }
 
-    /**
+    /** todo: read over
      * The method to compile raw text into a bloom filter
      * @param rawDictionary The text file containing the elements to compile into a Bloom filter
      * @return true If Bloom filter was successfully built and saved to disk
@@ -97,37 +73,31 @@ public class Controller {
         }
 
         // first we should verify that we have all the necessary components
-        int nElementsInDictionary = countNewlines(rawDictionary);
-        int bitsRequired = BloomFilter.calculateBitArraySize(desiredFP, nElementsInDictionary);
-        int nHashFunctions = BloomFilter.calculateNumOfHashFunctions(bitsRequired, nElementsInDictionary);
-
-        if (null == seeds || seeds.length < nHashFunctions) {
-            return false;
-        }
+        int nElements = countNewlines(rawDictionary);
+        int nBits = BloomFilter.calculateBitArraySize(BloomFilter.DFP_DEFAULT, nElements);
+        int nHashes = BloomFilter.calculateNumOfHashFunctions(nBits, nElements);
 
         // build the filter
-        filter = new BloomFilter(desiredFP, hash, Arrays.copyOf(seeds, nHashFunctions));
-        filter.build(nElementsInDictionary);
+        filter = BloomFilter.build(BloomFilter.DFP_DEFAULT, nElements);
 
         // add elements to filter
         Read.dictFromRawSource(rawDictionary, filter);
 
         // save filter to memory
         byte[] header = versionInfo
-                .setHashFunctions((short) nHashFunctions)
-                .setBloomFilterBitsRequired((short) bitsRequired)
+                .setHashFunctions((short) nHashes)
+                .setBloomFilterBitsRequired((short) nBits)
                 .generateByteHeader();
 
         byte[] dictionary = filter.getBitArray().toByteArray();
 
         Write.dictToBinaryFile(COMPILED_DICTIONARY_PATH, header, dictionary);
-        Write.seedsToCsvFile(SEEDS_FILE, filter.getSeeds());
 
         // finished
         return true;
     }
 
-    /**
+    /** todo: read over
      * The method to check elements in a compiled filter. Assumes buildFilter() has already been invoked and
      * the filter has been compiled separately.
      * @param elementsToCheck The list of Strings to check against the filter
@@ -141,12 +111,7 @@ public class Controller {
         verifyHeader(dData.header);
 
         // build the filter
-        filter = new BloomFilter(desiredFP, hash, seeds);
-        filter.build(dData.dictionary);
-
-        if (null == filter) {
-            return null;
-        }
+        filter = BloomFilter.build(dData.dictionary, dData.header.getNHashFunctions());
 
         // for each element to check, run through filter
         ArrayList<String> notFound = new ArrayList<>();
@@ -168,17 +133,9 @@ public class Controller {
         if (!isCorrectVersion(other)) {
             throw new Error("Incorrect program version from compiled dictionary.");
         }
-
-        if (!isCorrectFilterConfigurations(other)) {
-            throw new Error("Incorrect bloom filter configurations detected from compiled dictionary.");
-        }
     }
 
     private boolean isCorrectVersion(BuildInfo other) {
         return other.getVersion() == this.versionInfo.getVersion();
-    }
-
-    private boolean isCorrectFilterConfigurations(BuildInfo other) {
-        return this.seeds.length >= other.getNHashFunctions();
     }
 }

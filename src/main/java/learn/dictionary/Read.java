@@ -4,7 +4,6 @@ import learn.utils.BloomFilter;
 import learn.utils.BuildInfo;
 
 import java.io.*;
-import java.util.Locale;
 
 /**
  * The interface to build a bloom filter either:

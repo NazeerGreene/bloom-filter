@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="97a8e34a-f870-44b3-9f37-3be22e058f1a" name="Changes" comment="versioning checks added">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/learn/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/learn/controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/learn/utils/BloomFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/learn/utils/BloomFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/learn/BloomFilterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/learn/BloomFilterTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Enum" />
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="step-4" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar:///opt/homebrew/Cellar/openjdk/23/libexec/openjdk.jdk/Contents/Home/lib/src.zip!/java.base/java/util/BitSet.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2nm2tTL5oBmrZg8UnE1cw2U65mi" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.App.executor": "Run",
+    "JUnit.BloomFilterTest.addsMembersAndReturnsTrue.executor": "Run",
+    "JUnit.BloomFilterTest.calculateBitArraySize.executor": "Run",
+    "JUnit.BloomFilterTest.calculateBitArraySizeProducesExpectedSize.executor": "Run",
+    "JUnit.BloomFilterTest.calculateNumOfHashFunctions.executor": "Run",
+    "JUnit.BloomFilterTest.doesNotReturnTrueForNonExistentMember.executor": "Run",
+    "JUnit.BloomFilterTest.executor": "Run",
+    "JUnit.ControllerTest.BuildAndCompileBloomFilter.executor": "Debug",
+    "JUnit.ControllerTest.BuildDictionary.executor": "Run",
+    "JUnit.ControllerTest.RunAndCheckBloomFilter.executor": "Debug",
+    "JUnit.ControllerTest.RunDictionary.executor": "Run",
+    "JUnit.ControllerTest.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "revisions",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/nazeer/Desktop/speller-checker/data/production",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data/production" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data/original" />
+      <recent name="$PROJECT_DIR$/data/test" />
+      <recent name="$PROJECT_DIR$/data/production" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="learn.controller" />
+      <recent name="learn" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.ControllerTest.BuildDictionary">
+    <configuration default="true" type="Application" factoryName="Application">
+      <module name="speller-checker" />
+      <option name="PROGRAM_PARAMETERS" value="check all the good things about the zoo and the other animal habitats" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="speller-checker" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="learn.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="learn.controller" />
+      <option name="MAIN_CLASS_NAME" value="learn.controller.ControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ControllerTest.BuildAndCompileBloomFilter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="speller-checker" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="learn.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="learn.controller" />
+      <option name="MAIN_CLASS_NAME" value="learn.controller.ControllerTest" />
+      <option name="METHOD_NAME" value="BuildAndCompileBloomFilter" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ControllerTest.BuildDictionary" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="speller-checker" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="learn.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="learn.controller" />
+      <option name="MAIN_CLASS_NAME" value="learn.controller.ControllerTest" />
+      <option name="METHOD_NAME" value="BuildDictionary" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ControllerTest.RunAndCheckBloomFilter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="speller-checker" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="learn.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="learn.controller" />
+      <option name="MAIN_CLASS_NAME" value="learn.controller.ControllerTest" />
+      <option name="METHOD_NAME" value="RunAndCheckBloomFilter" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ControllerTest.RunDictionary" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="speller-checker" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="learn.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="learn.controller" />
+      <option name="MAIN_CLASS_NAME" value="learn.controller.ControllerTest" />
+      <option name="METHOD_NAME" value="RunDictionary" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.ControllerTest.BuildDictionary" />
+        <item itemvalue="JUnit.ControllerTest.RunDictionary" />
+        <item itemvalue="JUnit.ControllerTest.RunAndCheckBloomFilter" />
+        <item itemvalue="JUnit.ControllerTest.BuildAndCompileBloomFilter" />
+        <item itemvalue="JUnit.ControllerTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="97a8e34a-f870-44b3-9f37-3be22e058f1a" name="Changes" comment="" />
+      <created>1729564145522</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1729564145522</updated>
+    </task>
+    <task id="LOCAL-00001" summary="dictionary data returned more idiomatically">
+      <option name="closed" value="true" />
+      <created>1732264203157</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732264203157</updated>
+    </task>
+    <task id="LOCAL-00002" summary="versioning checks added">
+      <option name="closed" value="true" />
+      <created>1732264639024</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1732264639025</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="dictionary data returned more idiomatically" />
+    <MESSAGE value="versioning checks added" />
+    <option name="LAST_COMMIT_MESSAGE" value="versioning checks added" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/learn/dictionary/Write.java</url>
+          <line>18</line>
+          <properties class="learn.dictionary.Write" method="dictToBinaryFile">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/learn/controller/Controller.java</url>
+          <line>106</line>
+          <properties class="learn.controller.Controller" method="checkFilterFor">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/learn/utils/BloomFilter.java</url>
+          <line>105</line>
+          <properties class="learn.utils.BloomFilter" method="contains">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

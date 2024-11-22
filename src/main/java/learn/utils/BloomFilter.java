@@ -9,14 +9,15 @@ import java.util.BitSet;
 import java.util.stream.IntStream;
 
 public class BloomFilter {
-    private BitSet bitArray;
+    public static final double DFP_MAX = 1.0;
+    public static final double DFP_MIN =  0.0;
+    public static final double DFP_DEFAULT = 0.01;
+
+    private final BitSet bitArray;
     private final double DFP; // desired false positive probability
     private int[] seeds;
     private QuickHash quickHash;
 
-    public static double DFP_MAX = 1.0;
-    public static double DFP_MIN =  0.0;
-    public static double DFP_DEFAULT = 0.01;
 
     private BloomFilter(double dfp, int[] seeds, BitSet bitArray, QuickHash quickHash) {
         this.DFP = isValidDfp(dfp) ? dfp : DFP_DEFAULT;
@@ -25,7 +26,8 @@ public class BloomFilter {
         this.quickHash = quickHash;
     }
 
-    public BloomFilter build(double dfp, int nElements) {
+    // todo: generate documentation
+    public static BloomFilter build(double dfp, int nElements) {
         int nBits = calculateBitArraySize(dfp, nElements);
         int nHashes = calculateNumOfHashFunctions(nBits, nElements);
 
@@ -37,7 +39,8 @@ public class BloomFilter {
         return new BloomFilter(dfp, seeds, bitArray, FNV1A64::hash);
     }
 
-    public BloomFilter build(byte[] data, int nSeeds) {
+    // todo: generate documentation
+    public static BloomFilter build(byte[] data, int nSeeds) {
         nSeeds = Math.max(nSeeds, 2);
         int[] seeds = IntStream.rangeClosed(1, nSeeds).toArray();
 
@@ -73,6 +76,10 @@ public class BloomFilter {
         return this.bitArray;
     }
 
+    public void withHasher(QuickHash quickHash) {
+        this.quickHash = quickHash;
+    }
+
     /**
      * Adds a new member to the member set
      * @param element The new member to add
@@ -89,7 +96,6 @@ public class BloomFilter {
 //                hash, index, bitArray.get(index));
         }
     }
-
 
     /**
      * Queries the member set to check for an element
