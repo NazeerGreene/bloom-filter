@@ -85,8 +85,6 @@ public final class BuildInfo {
                 (char)buffer.get() +
                 (char)buffer.get();
 
-
-
         short version = buffer.getShort();
         short nHashes = buffer.getShort();
         int bitsRequired = buffer.getInt();

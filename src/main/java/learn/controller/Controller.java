@@ -138,13 +138,7 @@ public class Controller {
         // read the dictionary from memory
         DictionaryData dData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH);
 
-        if (!isCorrectVersion(dData.header)) {
-            throw new Error("Incorrect program version from compiled dictionary.");
-        }
-
-        if (!isCorrectFilterConfigurations(dData.header)) {
-            throw new Error("Incorrect bloom filter configurations detected from compiled dictionary.");
-        }
+        verifyHeader(dData.header);
 
         // build the filter
         filter = new BloomFilter(desiredFP, hash, seeds);
@@ -167,10 +161,20 @@ public class Controller {
         return notFound;
     }
 
-    private boolean isCorrectVersion(BuildInfo other) {
-        if (other == null) {
-            return false; // incorrect header detected
+    private void verifyHeader(BuildInfo other) {
+        if (null == other) {
+            throw new Error("Incorrect binary file passed to program.");
         }
+        if (!isCorrectVersion(other)) {
+            throw new Error("Incorrect program version from compiled dictionary.");
+        }
+
+        if (!isCorrectFilterConfigurations(other)) {
+            throw new Error("Incorrect bloom filter configurations detected from compiled dictionary.");
+        }
+    }
+
+    private boolean isCorrectVersion(BuildInfo other) {
         return other.getVersion() == this.versionInfo.getVersion();
     }
 
