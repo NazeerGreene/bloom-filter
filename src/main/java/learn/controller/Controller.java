@@ -57,13 +57,26 @@ public class Controller {
 
     // either we build the filter or we check the filter for members
     public void run(List<String> args) throws IOException {
-//        buildFilter("./data/test/dict-sub.txt");
-//        List<String> notFound = checkFilterFor(List.of("aardvark", "abduction", "absconce", "zoo"));
-//        System.out.println("Not Found");
-//        if (notFound != null) {
-//            notFound.forEach(System.out::println);
-//        }
+        if (args.isEmpty()) {
+            throw new IllegalArgumentException("Missing command: build <filename>, check [arg...]");
+        }
 
+        List<String> notFound;
+        String command = args.removeFirst();
+
+        switch (command) {
+            case "build", "-b":
+                buildFilter(args.removeFirst());
+                return;
+            case "check", "-c":
+                notFound = checkFilterFor(args);
+                break;
+            default:
+                throw new IllegalArgumentException("Missing command: build <filename>, check [arg...]");
+        }
+
+        System.out.println("Not found in dictionary:");
+        notFound.forEach(System.out::println);
     }
 
     /**
@@ -104,7 +117,7 @@ public class Controller {
 
         // finished
         return true;
-    };
+    }
 
     /**
      * The method to check elements in a compiled filter. Assumes buildFilter() has already been invoked and
@@ -115,7 +128,7 @@ public class Controller {
      */
     private List<String> checkFilterFor(List<String> elementsToCheck) throws IOException {
         // read the dictionary from memory
-        byte[] dictionaryBinaryData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH);
+        byte[] dictionaryBinaryData = Read.dictFromCompiledSource(COMPILED_DICTIONARY_PATH, null);
 
         // build the filter
         BitSet data = BitSet.valueOf(dictionaryBinaryData);
