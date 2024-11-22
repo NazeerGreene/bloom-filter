@@ -25,7 +25,7 @@ class ControllerTest {
     @Test
     void RunDictionary() throws IOException {
         Controller controller = new Controller();
-        controller.run(new ArrayList<>(List.of("check", "aardvark", "abduction", "absconce", "zoo")));
+        controller.run(new ArrayList<>(List.of("check", "Aaronic", "abduction", "absconce", "zoo")));
     }
 
     private void setup() throws IOException {

@@ -1,33 +1,49 @@
 package learn.utils;
 
+import learn.hash.FNV1A64;
 import learn.hash.QuickHash;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.stream.IntStream;
 
 public class BloomFilter {
     private BitSet bitArray;
     private final double DFP; // desired false positive probability
-    private final int[] seeds;
-    private final QuickHash quickHash;
+    private int[] seeds;
+    private QuickHash quickHash;
 
     public static double DFP_MAX = 1.0;
     public static double DFP_MIN =  0.0;
     public static double DFP_DEFAULT = 0.01;
 
-    public BloomFilter(double DFP, QuickHash quickHash, int[] seeds) {
-        this.DFP = isValidDsf(DFP) ? DFP : DFP_DEFAULT;
+    private BloomFilter(double dfp, int[] seeds, BitSet bitArray, QuickHash quickHash) {
+        this.DFP = isValidDfp(dfp) ? dfp : DFP_DEFAULT;
         this.seeds = seeds;
+        this.bitArray = bitArray;
         this.quickHash = quickHash;
-        this.bitArray = null;
     }
 
-    public BloomFilter(BloomFilter other) {
-        this.DFP = other.DFP;
-        this.seeds = other.getSeeds();
-        this.quickHash = other.quickHash;
-        this.bitArray = null;
+    public BloomFilter build(double dfp, int nElements) {
+        int nBits = calculateBitArraySize(dfp, nElements);
+        int nHashes = calculateNumOfHashFunctions(nBits, nElements);
+
+        BitSet bitArray = new BitSet(nBits);
+        bitArray.clear();
+
+        int[] seeds = IntStream.rangeClosed(1, nHashes).toArray();
+
+        return new BloomFilter(dfp, seeds, bitArray, FNV1A64::hash);
+    }
+
+    public BloomFilter build(byte[] data, int nSeeds) {
+        nSeeds = Math.max(nSeeds, 2);
+        int[] seeds = IntStream.rangeClosed(1, nSeeds).toArray();
+
+        BitSet bitArray = BitSet.valueOf(data);
+
+        return new BloomFilter(DFP_DEFAULT, seeds, bitArray, FNV1A64::hash);
     }
 
     /**
@@ -44,6 +60,12 @@ public class BloomFilter {
         return Arrays.copyOf(seeds, seeds.length);
     }
 
+    public void withSeeds(int[] newSeeds) {
+        if (newSeeds != null && newSeeds.length > 1) {
+            this.seeds = Arrays.copyOf(newSeeds, newSeeds.length);
+        }
+    }
+
     /**
      * Returns the underlying bit array
      */
@@ -52,41 +74,11 @@ public class BloomFilter {
     }
 
     /**
-     * Builds the underlying bit array for the Bloom filter
-     * @param nElements The number of total elements expected in the member set
-     * @return true If the bit array was successfully allocated and cleared
-     *         false If the bit array was not successfully allocated
-     */
-    public boolean build(int nElements) {
-        int bitsRequired = calculateBitArraySize(DFP, nElements);
-        try {
-            this.bitArray = new BitSet(bitsRequired);
-            bitArray.clear();
-        } catch (Exception ex) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Sets the underlying bit array to the new bit array without occupying new memory
-     */
-    public void build(byte[] data) {
-        this.bitArray = BitSet.valueOf(data);
-    }
-
-    /**
      * Adds a new member to the member set
      * @param element The new member to add
      */
     public void add(String element) {
-        if (bitArray == null) {
-            throw new IllegalStateException("Bloom filter not initialized. Call build() first.");
-        }
-
-        if (null == element) {
-            throw new IllegalArgumentException("element cannot be null");
-        }
+        verifyState(element);
 
         long[] hashes = this.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
@@ -106,9 +98,7 @@ public class BloomFilter {
      *         false The element does not exist in set
      */
     public boolean contains(String element) {
-        if (bitArray == null) {
-            throw new IllegalStateException("Bloom filter not initialized. Call build() first.");
-        }
+        verifyState(element);
 
         long[] hashes = this.hash_k_times(element.getBytes(StandardCharsets.UTF_8), seeds);
 
@@ -126,8 +116,18 @@ public class BloomFilter {
 
     // ----------------------------- HELPERS -----------------------------
 
-    private boolean isValidDsf(double dfp) {
+    private boolean isValidDfp(double dfp) {
         return dfp >= DFP_MIN && dfp <= DFP_MAX;
+    }
+
+    private void verifyState(String element) {
+        if (null == this.bitArray) {
+            throw new IllegalStateException("Bloom filter not initialized. Call build() first.");
+        }
+
+        if (null == element) {
+            throw new IllegalArgumentException("element cannot be null");
+        }
     }
 
     private int getIndexFromHash(long hash) {

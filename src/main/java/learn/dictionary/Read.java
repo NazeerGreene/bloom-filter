@@ -23,7 +23,7 @@ public class Read {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             // no need to skip any line
             for(String line = reader.readLine(); line != null; line = reader.readLine()) {
-                filter.add(line.toLowerCase(Locale.ROOT));
+                filter.add(line.trim());
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
