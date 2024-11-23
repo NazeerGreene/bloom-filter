@@ -25,7 +25,7 @@ public class Controller {
     private final BuildInfo versionInfo;
 
     // File locations
-    private static final String DATA_DIRECTORY = "./data/test/";
+    private static final String DATA_DIRECTORY = "./data/production/";
     private static final String COMPILED_DICTIONARY_PATH = DATA_DIRECTORY + "dict-compiled.bf";
 
     // Constructors
