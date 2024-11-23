@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97a8e34a-f870-44b3-9f37-3be22e058f1a" name="Changes" comment="versioning checks added">
+    <list default="true" id="97a8e34a-f870-44b3-9f37-3be22e058f1a" name="Changes" comment="finsihed revising bloom filter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/learn/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/learn/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/learn/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/learn/controller/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/learn/utils/BloomFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/learn/utils/BloomFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/learn/dictionary/Read.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/learn/dictionary/Read.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -226,13 +225,22 @@
       <option name="project" value="LOCAL" />
       <updated>1732264639025</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="finsihed revising bloom filter">
+      <option name="closed" value="true" />
+      <created>1732333774960</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1732333774960</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="dictionary data returned more idiomatically" />
     <MESSAGE value="versioning checks added" />
-    <option name="LAST_COMMIT_MESSAGE" value="versioning checks added" />
+    <MESSAGE value="finsihed revising bloom filter" />
+    <option name="LAST_COMMIT_MESSAGE" value="finsihed revising bloom filter" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -248,7 +256,7 @@
         </line-breakpoint>
         <line-breakpoint type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/learn/controller/Controller.java</url>
-          <line>105</line>
+          <line>107</line>
           <properties class="learn.controller.Controller" method="checkFilterFor">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />

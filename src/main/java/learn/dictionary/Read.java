@@ -1,9 +1,12 @@
 package learn.dictionary;
 
-import learn.utils.BloomFilter;
 import learn.utils.BuildInfo;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * The interface to build a bloom filter either:
@@ -12,23 +15,12 @@ import java.io.*;
  */
 public class Read {
     /**
-     * Read and add elements to a bloom filter. This method assumes the filter is already built
-     * (the bit array allocated) before calling this.
+     * Reads and returns lines from file provided by filename
      * @param filename Where to locate the raw source text file
-     * @param filter The filter to add elements to
      * @throws IOException If problems occur reading the text file
      */
-    public static void dictFromRawSource(String filename, BloomFilter filter) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            // no need to skip any line
-            for(String line = reader.readLine(); line != null; line = reader.readLine()) {
-                filter.add(line.trim());
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        } catch (IOException e) {
-            System.out.println("Could not open file: " + filename);
-        }
+    public static List<String> dictFromRawSource(String filename) throws IOException {
+        return Files.readAllLines(Paths.get(filename), StandardCharsets.US_ASCII);
     }
 
     /**

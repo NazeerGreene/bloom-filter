@@ -80,7 +80,9 @@ public class Controller {
         filter = BloomFilter.build(BloomFilter.DFP_DEFAULT, nElements);
 
         // add elements to filter
-        Read.dictFromRawSource(rawDictionary, filter);
+        for(String element: Read.dictFromRawSource(rawDictionary)) {
+            filter.add(element);
+        }
 
         // save filter to memory
         byte[] header = versionInfo
