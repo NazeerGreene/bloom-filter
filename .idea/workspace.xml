@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97a8e34a-f870-44b3-9f37-3be22e058f1a" name="Changes" comment="finsihed revising bloom filter">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/learn/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/learn/controller/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/learn/dictionary/Read.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/learn/dictionary/Read.java" afterDir="false" />
-    </list>
+    <list default="true" id="97a8e34a-f870-44b3-9f37-3be22e058f1a" name="Changes" comment="set to production" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,33 +42,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.App.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BloomFilterTest.addsMembersAndReturnsTrue.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BloomFilterTest.calculateBitArraySize.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BloomFilterTest.calculateBitArraySizeProducesExpectedSize.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BloomFilterTest.calculateNumOfHashFunctions.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BloomFilterTest.doesNotReturnTrueForNonExistentMember.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BloomFilterTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ControllerTest.BuildAndCompileBloomFilter.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.ControllerTest.BuildDictionary.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ControllerTest.RunAndCheckBloomFilter.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.ControllerTest.RunDictionary.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ControllerTest.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;revisions&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/nazeer/Desktop/speller-checker/pom.xml&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.App.executor": "Run",
+    "JUnit.BloomFilterTest.addsMembersAndReturnsTrue.executor": "Run",
+    "JUnit.BloomFilterTest.calculateBitArraySize.executor": "Run",
+    "JUnit.BloomFilterTest.calculateBitArraySizeProducesExpectedSize.executor": "Run",
+    "JUnit.BloomFilterTest.calculateNumOfHashFunctions.executor": "Run",
+    "JUnit.BloomFilterTest.doesNotReturnTrueForNonExistentMember.executor": "Run",
+    "JUnit.BloomFilterTest.executor": "Run",
+    "JUnit.ControllerTest.BuildAndCompileBloomFilter.executor": "Debug",
+    "JUnit.ControllerTest.BuildDictionary.executor": "Run",
+    "JUnit.ControllerTest.RunAndCheckBloomFilter.executor": "Debug",
+    "JUnit.ControllerTest.RunDictionary.executor": "Run",
+    "JUnit.ControllerTest.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/nazeer/Desktop/speller-checker/pom.xml",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "vcs.Git"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data/production" />
@@ -240,7 +236,8 @@
     <MESSAGE value="dictionary data returned more idiomatically" />
     <MESSAGE value="versioning checks added" />
     <MESSAGE value="finsihed revising bloom filter" />
-    <option name="LAST_COMMIT_MESSAGE" value="finsihed revising bloom filter" />
+    <MESSAGE value="set to production" />
+    <option name="LAST_COMMIT_MESSAGE" value="set to production" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
