@@ -59,13 +59,12 @@ public class Controller {
         notFound.forEach(System.out::println);
     }
 
-    /** todo: read over
+    /**
      * The method to compile raw text into a bloom filter
      * @param rawDictionary The text file containing the elements to compile into a Bloom filter
      * @return true If Bloom filter was successfully built and saved to disk
      *         false If Bloom filter was not successfully built
-     * @throws IOException If problems occur reading file provided by rawDictionary;
-     *                     or, if too few number of seeds provided in seeds.csv
+     * @throws IOException If problems occur reading file provided by rawDictionary
      */
     private boolean buildFilter(String rawDictionary) throws IOException {
         if (null == rawDictionary) {
@@ -97,7 +96,7 @@ public class Controller {
         return true;
     }
 
-    /** todo: read over
+    /**
      * The method to check elements in a compiled filter. Assumes buildFilter() has already been invoked and
      * the filter has been compiled separately.
      * @param elementsToCheck The list of Strings to check against the filter

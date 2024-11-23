@@ -25,11 +25,9 @@ class ControllerTest {
     }
 
     private void setup() throws IOException {
-        String sourceDir = "./data/original/";
-        String destDir = "./data/test/";
+        String source = "./data/original/dict-sub.txt";
+        String dest = "./data/test/dict-sub.txt";
 
-        Files.copy(Path.of(sourceDir + "dict-sub.txt"), Path.of(destDir + "dict-sub.txt"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(Path.of(sourceDir + "seeds.csv"), Path.of(destDir + "seeds.csv"), StandardCopyOption.REPLACE_EXISTING);
-
+        Files.copy(Path.of(source), Path.of(dest), StandardCopyOption.REPLACE_EXISTING);
     }
 }

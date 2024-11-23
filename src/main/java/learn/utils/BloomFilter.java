@@ -26,7 +26,12 @@ public class BloomFilter {
         this.quickHash = quickHash;
     }
 
-    // todo: generate documentation
+    /**
+     * Build a new Bloom filter for some number of elements
+     * @param dfp The desired false positive probability of the filter
+     * @param nElements The number of expected elements added to the filter
+     * @return The Bloom filter
+     */
     public static BloomFilter build(double dfp, int nElements) {
         int nBits = calculateBitArraySize(dfp, nElements);
         int nHashes = calculateNumOfHashFunctions(nBits, nElements);
@@ -39,7 +44,12 @@ public class BloomFilter {
         return new BloomFilter(dfp, seeds, bitArray, FNV1A64::hash);
     }
 
-    // todo: generate documentation
+    /**
+     * Build a Bloom filter using a previously compiled filter bit array
+     * @param data The bit array of a compiled filter
+     * @param nSeeds The number of seeds to use for this filter's hashing function
+     * @return The Bloom filter
+     */
     public static BloomFilter build(byte[] data, int nSeeds) {
         nSeeds = Math.max(nSeeds, 2);
         int[] seeds = IntStream.rangeClosed(1, nSeeds).toArray();
